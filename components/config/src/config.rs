@@ -164,6 +164,9 @@ pub struct Config {
     pub feed_filename: String,
     /// If set, files from static/ will be hardlinked instead of copied to the output dir.
     pub hard_link_static: bool,
+    /// Deprecated option, that got replaced by generate_feed; kept for backwards-compatibility.
+    #[serde(skip_serializing)]
+    pub generate_rss: bool,
 
     pub taxonomies: Vec<Taxonomy>,
 
@@ -392,6 +395,7 @@ impl Default for Config {
             feed_limit: None,
             feed_filename: "atom.xml".to_string(),
             hard_link_static: false,
+            generate_rss: false,
             taxonomies: Vec::new(),
             compile_sass: false,
             mode: Mode::Build,

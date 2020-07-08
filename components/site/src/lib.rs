@@ -759,7 +759,10 @@ impl Site {
         self.render_sitemap()?;
 
         let library = self.library.read().unwrap();
-        if self.config.generate_feed {
+        if self.config.generate_rss {
+            println!("Option generate_rss is deprecated, use generate_feed instead.");
+        }
+        if self.config.generate_feed || self.config.generate_rss {
             let is_multilingual = self.config.is_multilingual();
             let pages = if is_multilingual {
                 library
@@ -1110,7 +1113,11 @@ impl Site {
         context.insert("config", &self.config);
         context.insert("lang", lang);
 
-        let feed_filename = &self.config.feed_filename;
+        let feed_filename = if self.config.generate_rss {
+            "rss.xml"
+        } else {
+            &self.config.feed_filename
+        };
         let feed_url = if let Some(ref base) = base_path {
             self.config
                 .make_permalink(&base.join(feed_filename).to_string_lossy().replace('\\', "/"))
